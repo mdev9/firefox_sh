@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Remove the Firefox profile directory
 
@@ -10,9 +10,10 @@ rm -rf ~/.var/app/org.mozilla.firefox/
 #profile_dir=$(/home/.var/app/org.mozilla.firefox/.mozilla/firefox/profile1.default-release)
 #flatpak run org.mozilla.firefox -CreateProfile "profile1 profile_dir"
 
-# Check if Firefox is installed and launch it
-(flatpak run org.mozilla.firefox) || { echo "Firefox not installed"; exit 1; }
-
+flatpak install org.mozilla.firefox 1>/dev/null 2>/dev/null
+flatpak run org.mozilla.firefox 1>/dev/null 2>/dev/null &
+sleep 5
+flatpak kill org.mozilla.firefox
 
 # Modify Firefox preferences
 profile_dir=$(find ~/.var/app/org.mozilla.firefox/.mozilla/firefox/ -maxdepth 1 -type d -name '*.default-release')
@@ -37,9 +38,13 @@ else
 fi
 
 
-./InstallFirefoxAddon.py -f "darkreader"
-./InstallFirefoxAddon.py -f "ublockorigin"
-./InstallFirefoxAddon.py -f "lastpass"
-./InstallFirefoxAddon.py -f "cobalt"
-./InstallFirefoxAddon.py -f "i still don't care about cookies"
-./InstallFirefoxAddon.py -f "Vimium C"
+~/.local/bin/firefox_sh/InstallFirefoxAddon.py -f "darkreader" &
+~/.local/bin/firefox_sh/InstallFirefoxAddon.py -f "ublockorigin" &
+~/.local/bin/firefox_sh/InstallFirefoxAddon.py -f "lastpass" &
+~/.local/bin/firefox_sh/InstallFirefoxAddon.py -f "cobalt" &
+~/.local/bin/firefox_sh/InstallFirefoxAddon.py -f "i still don't care about cookies" &
+~/.local/bin/firefox_sh/InstallFirefoxAddon.py -f "Vimium C" &
+
+sleep 3
+flatpak run org.mozilla.firefox 1>/dev/null 2>/dev/null &
+disown %%

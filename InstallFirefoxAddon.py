@@ -76,7 +76,7 @@ def install(addon_xpi, guid):
         sys.exit(1)
 
     for profile in dest:
-        print(f"Installing to {profile}...")
+        #print(f"Installing to {profile}...")
         Path(profile + "/extensions").mkdir(parents=True, exist_ok=True)
         with open(f"{profile}/extensions/{guid}.xpi", "wb") as f:
             f.write(addon_xpi)
